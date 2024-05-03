@@ -6,10 +6,14 @@ O domínio escolhido pelo grupo foi um Sistema de Agendamento e Gerenciamento de
 
 # Ferramentas e Tecnologias
 Frontend: 
+
 Backend: 
+
 Banco de Dados:
 
 # Equipe
 Beatriz Batista Guimarães
+
 Bruno Gomes de Almeida
+
 Icaro Carneiro Caetano 
