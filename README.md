@@ -6,9 +6,9 @@ O domínio escolhido pelo grupo foi um Sistema de Agendamento e Gerenciamento de
 A aplicação web permitirá o agendamento de diversos procedimentos estéticos em um estabelecimento específico. 
 
 # Ferramentas e Tecnologias
-Frontend: 
+Frontend: Javascript / HTML / CSS / Vue Js
 
-Backend: 
+Backend: C# / .Net
 
 Banco de Dados:
 
