@@ -3,6 +3,7 @@ Este repositório é dedicado ao projeto final da disciplina Desenvolvimento Ful
 
 # Beauty-Express
 O domínio escolhido pelo grupo foi um Sistema de Agendamento e Gerenciamento de Serviços voltados para beleza e estética.
+A aplicação web permitirá o agendamento de diversos procedimentos estéticos em um estabelecimento específico. 
 
 # Ferramentas e Tecnologias
 Frontend: 
