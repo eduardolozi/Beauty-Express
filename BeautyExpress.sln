@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyExpress", "BeautyExpress.csproj", "{8D2E76A5-3932-4582-B1A1-8889BB51295B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{13CDB1AB-2273-4D33-889C-4A7B13B5BE1E}"
+	ProjectSection(SolutionItems) = preProject
+		ApplicationDbContext.cs = ApplicationDbContext.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D2E76A5-3932-4582-B1A1-8889BB51295B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D2E76A5-3932-4582-B1A1-8889BB51295B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D2E76A5-3932-4582-B1A1-8889BB51295B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D2E76A5-3932-4582-B1A1-8889BB51295B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F856902B-AB1C-4C78-9842-9954DD4571D6}
+	EndGlobalSection
+EndGlobal
