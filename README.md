@@ -10,7 +10,7 @@ Frontend: Javascript / HTML / CSS / Vue Js
 
 Backend: C# / .Net
 
-Banco de Dados:
+Banco de Dados: MySQL Workbench
 
 # Equipe
 Beatriz Batista Guimarães
