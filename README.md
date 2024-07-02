@@ -6,7 +6,7 @@ O domínio escolhido pelo grupo foi um Sistema de Agendamento e Gerenciamento de
 A aplicação web permitirá o agendamento de diversos procedimentos estéticos em um estabelecimento específico. 
 
 # Diagrama
-https://lucid.app/lucidchart/aaf84e92-0242-41df-b41d-8b707d0a3564/edit?viewport_loc=-801%2C-335%2C4039%2C1876%2C0_0&invitationId=inv_120e05b9-01fc-4d52-a07f-ad87beb090b8
+https://drive.google.com/drive/folders/1ofGKzhdtj3Xel30NbyeeRL5otI9zvP6Q?usp=sharing
 
 # Ferramentas e Tecnologias
 Frontend: Javascript / HTML / CSS / Vue Js
