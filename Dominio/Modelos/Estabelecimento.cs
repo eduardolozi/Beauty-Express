@@ -2,7 +2,7 @@
 
 namespace Dominio.Modelos
 {
-    public class Estabelecimento
+    public class Estabelecimento : EntitiesAbstract
     {
         public int Id { get; set; }
         [NotNull] public string Nome { get; set; }

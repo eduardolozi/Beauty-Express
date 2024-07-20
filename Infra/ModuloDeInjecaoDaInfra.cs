@@ -1,18 +1,14 @@
 ﻿using Dominio.Interfaces;
 using Dominio.Modelos;
+using Dominio.Service;
+using Dominio.Validadores;
 using Infra.Repositorios;
 using Microsoft.Extensions.DependencyInjection;
-using Modelos.Cliente;
 using Modelos.DataHorario;
 using Modelos.Pagamento;
 using Modelos.PagamentoCartao;
 using Modelos.PagamentoPix;
 using Modelos.Profissional;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra
 {
@@ -21,14 +17,25 @@ namespace Infra
         public static void RegistrarServicos(IServiceCollection servicos)
         {
             servicos.AddDbContext<BeautyContext>();
-            servicos.AddScoped<IRepository<Agendamento>, AgendamentoRepository>();
-            servicos.AddScoped<IRepository<Cliente>, ClienteRepository>();
-            servicos.AddScoped<IRepository<DataHorario>, DataHorarioRepository>();
-            servicos.AddScoped<IRepository<Estabelecimento>, EstabelecimentoRepository>();
+
+            servicos.AddScoped<IClienteRepository, ClienteRepository>();
+            servicos.AddScoped<IClienteService, ClienteService>();
+            servicos.AddScoped<ClienteValidator>();
+
+            servicos.AddScoped<IEstabelecimentosRepository, EstabelecimentoRepository>();
+            servicos.AddScoped<IEstabelecimentosService, EstabelecimentosService>();
+            servicos.AddScoped<EstabelecimentosValidator>();
+
+            servicos.AddScoped<IProfissionaisRepository, ProfissionalRepository>();
+            servicos.AddScoped<IProfissionaisService, ProfissionaisService>();
+            servicos.AddScoped<ProfissionaisValidator>();
+
+            servicos.AddScoped<IRepository<Agendamento>, AgendamentoRepository>();            
+            servicos.AddScoped<IRepository<DataHorario>, DataHorarioRepository>();            
             servicos.AddScoped<IRepository<Pagamento>, PagamentoRepository>();
             servicos.AddScoped<IRepository<PagamentoCartao>, PagamentoCartaoRepository>();
             servicos.AddScoped<IRepository<PagamentoPix>, PagamentoPixRepository>();
-            servicos.AddScoped<IRepository<Profissional>, ProfissionalRepository>();
+            
             servicos.AddScoped<IRepository<Servico>, ServicoRepository>();
         }
 

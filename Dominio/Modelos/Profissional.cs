@@ -1,8 +1,9 @@
+using Dominio.Modelos;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Modelos.Profissional
 {
-    public class Profissional
+    public class Profissional : EntitiesAbstract
     {
         public int Id { get; set; }
         [NotNull] public string Nome { get; set; }

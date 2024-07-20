@@ -1,5 +1,13 @@
 using Dominio;
 using Infra;
+using Microsoft.EntityFrameworkCore;
+
+var db = new BeautyContext();
+var migracoesPendentes = db.Database.GetPendingMigrations();
+if (migracoesPendentes.Count() > 0)
+{
+    db.Database.Migrate();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 

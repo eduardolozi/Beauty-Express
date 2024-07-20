@@ -1,6 +1,5 @@
 ﻿using Dominio.Interfaces;
 using Dominio.Modelos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -9,44 +8,87 @@ namespace Web.Controllers
     [ApiController]
     public class EstabelecimentoController : ControllerBase
     {
-        private readonly IRepository<Estabelecimento> _repostorio;
-        public EstabelecimentoController(IRepository<Estabelecimento> repostorio)
+        private readonly IEstabelecimentosService _estabelecimentosService;
+        public EstabelecimentoController(IEstabelecimentosService estabelecimentosService)
         {
-            _repostorio = repostorio;
+            _estabelecimentosService = estabelecimentosService;
         }
 
         [HttpGet("estabelecimentos")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var estabelecimentos = await _repostorio.ObterTodos();
-            return Ok(estabelecimentos);
+            return Ok(await _estabelecimentosService.ObterTodos());
         }
 
         [HttpGet("estabelecimento/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var estabelecimento = await _repostorio.ObterPorId(id);
-            return Ok(estabelecimento);
+            try
+            {
+                return Ok(await _estabelecimentosService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("estabelecimento")]
-        public async Task<CreatedResult> Adicionar([FromBody] Estabelecimento estabelecimento)
+        public async Task<ActionResult> Adicionar([FromBody] Estabelecimento estabelecimento)
         {
-            await _repostorio.Adicionar(estabelecimento);
-            return Created();
+            try
+            {
+                return Ok(await _estabelecimentosService.Adicionar(estabelecimento));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("estabelecimento/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] Estabelecimento estabelecimento)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Estabelecimento estabelecimento)
         {
-            await _repostorio.Atualizar(id, estabelecimento);
+            if (id == 0 || id != estabelecimento.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _estabelecimentosService.Atualizar(estabelecimento);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("estabelecimento/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _estabelecimentosService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

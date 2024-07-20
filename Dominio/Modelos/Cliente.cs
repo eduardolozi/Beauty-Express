@@ -1,8 +1,9 @@
+using Dominio.Modelos;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Modelos.Cliente
 {
-    public class Cliente 
+    public class Cliente : EntitiesAbstract
     {
         public int Id { get; set; }  
         [NotNull] public string Nome { get; set; }

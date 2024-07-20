@@ -1,6 +1,4 @@
 using Dominio.Interfaces;
-using Dominio.Modelos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Modelos.Profissional;
 
@@ -10,44 +8,88 @@ namespace Web.Controllers
     [ApiController]
     public class ProfissionalController : ControllerBase
     {
-        private readonly IRepository<Profissional> _repostorio;
-        public ProfissionalController(IRepository<Profissional> repostorio)
+        private readonly IProfissionaisService _profissionaisService;
+
+        public ProfissionalController(IProfissionaisService profissionaisService)
         {
-            _repostorio = repostorio;
+            _profissionaisService = profissionaisService;
         }
 
         [HttpGet("profissionais")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var profissionais = await _repostorio.ObterTodos();
-            return Ok(profissionais);
+            return Ok(await _profissionaisService.ObterTodos());
         }
 
         [HttpGet("profissional/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var profissional = await _repostorio.ObterPorId(id);
-            return Ok(profissional);
+            try
+            {
+                return Ok(await _profissionaisService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("profissional")]
-        public async Task<CreatedResult> Adicionar([FromBody] Profissional profissional)
+        public async Task<ActionResult> Adicionar([FromBody] Profissional profissional)
         {
-            await _repostorio.Adicionar(profissional);
-            return Created();
+            try
+            {
+                return Ok(await _profissionaisService.Adicionar(profissional));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("profssional/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] Profissional profissional)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Profissional profissional)
         {
-            await _repostorio.Atualizar(id, profissional);
+            if (id == 0 || id != profissional.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _profissionaisService.Atualizar(profissional);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("profissional/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _profissionaisService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }
