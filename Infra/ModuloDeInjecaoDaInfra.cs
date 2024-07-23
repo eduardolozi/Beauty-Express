@@ -1,14 +1,8 @@
 ﻿using Dominio.Interfaces;
-using Dominio.Modelos;
 using Dominio.Service;
 using Dominio.Validadores;
 using Infra.Repositorios;
 using Microsoft.Extensions.DependencyInjection;
-using Modelos.DataHorario;
-using Modelos.Pagamento;
-using Modelos.PagamentoCartao;
-using Modelos.PagamentoPix;
-using Modelos.Profissional;
 
 namespace Infra
 {
@@ -30,14 +24,29 @@ namespace Infra
             servicos.AddScoped<IProfissionaisService, ProfissionaisService>();
             servicos.AddScoped<ProfissionaisValidator>();
 
-            servicos.AddScoped<IRepository<Agendamento>, AgendamentoRepository>();            
-            servicos.AddScoped<IRepository<DataHorario>, DataHorarioRepository>();            
-            servicos.AddScoped<IRepository<Pagamento>, PagamentoRepository>();
-            servicos.AddScoped<IRepository<PagamentoCartao>, PagamentoCartaoRepository>();
-            servicos.AddScoped<IRepository<PagamentoPix>, PagamentoPixRepository>();
-            
-            servicos.AddScoped<IRepository<Servico>, ServicoRepository>();
-        }
+            servicos.AddScoped<IDataHorariosRepository, DataHorarioRepository>();
+            servicos.AddScoped<IDataHorariosService, DataHorariosService>();
+            servicos.AddScoped<DataHorariosValidator>();
 
+            servicos.AddScoped<IPagamentoCartaoRepository, PagamentoCartaoRepository>();
+            servicos.AddScoped<IPagamentoCartaoService, PagamentoCartaoService>();
+            servicos.AddScoped<PagamentoCartaoValidator>();
+
+            servicos.AddScoped<IPagamentosPixRepository, PagamentoPixRepository>();
+            servicos.AddScoped<IPagamentosPixService, PagamentosPixService>();
+            servicos.AddScoped<PagamentosPixValidator>();
+
+            servicos.AddScoped<IPagamentoRepository, PagamentoRepository>();
+            servicos.AddScoped<IPagamentoService, PagamentoService>();
+            servicos.AddScoped<PagamentoValidator>();
+
+            servicos.AddScoped<IAgendamentosRepository, AgendamentoRepository>();
+            servicos.AddScoped<IAgendamentosService, AgendamentosService>();
+            servicos.AddScoped<AgendamentosValidator>();
+
+            servicos.AddScoped<IServicosRepository, ServicoRepository>();
+            servicos.AddScoped<IServicosService, ServicosService>();
+            servicos.AddScoped<ServicosValidator>();
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Dominio.Modelos
 {
-    public class Servico
+    public class Servico : EntitiesAbstract
     {
         public int Id { get; set; }
         [NotNull] public string Nome { get; set; }

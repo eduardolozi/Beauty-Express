@@ -1,7 +1,7 @@
 using Dominio.Interfaces;
-using Dominio.Modelos;
-using Microsoft.AspNetCore.Http;
+using Dominio.Service;
 using Microsoft.AspNetCore.Mvc;
+using Modelos.Cliente;
 using Modelos.PagamentoPix;
 
 namespace Web.Controllers
@@ -10,44 +10,88 @@ namespace Web.Controllers
     [ApiController]
     public class PagamentoPixController : ControllerBase
     {
-        private readonly IRepository<PagamentoPix> _repostorio;
-        public PagamentoPixController(IRepository<PagamentoPix> repostorio)
+        private readonly IPagamentosPixService _pagamentosPixService;
+
+        public PagamentoPixController(IPagamentosPixService pagamentosPixService)
         {
-            _repostorio = repostorio;
+            _pagamentosPixService = pagamentosPixService;
         }
 
         [HttpGet("pagamentosPix")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var pagamentosPix = await _repostorio.ObterTodos();
-            return Ok(pagamentosPix);
+            return Ok(await _pagamentosPixService.ObterTodos());
         }
 
         [HttpGet("pagamentoPix/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var pagamentoPix = await _repostorio.ObterPorId(id);
-            return Ok(pagamentoPix);
+            try
+            {
+                return Ok(await _pagamentosPixService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("pagamentoPix")]
-        public async Task<CreatedResult> Adicionar([FromBody] PagamentoPix pagamentoPix)
+        public async Task<ActionResult> Adicionar([FromBody] PagamentoPix pagamentoPix)
         {
-            await _repostorio.Adicionar(pagamentoPix);
-            return Created();
+            try
+            {
+                return Ok(await _pagamentosPixService.Adicionar(pagamentoPix));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("pagamentoPix/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] PagamentoPix pagamentoPix)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] PagamentoPix pagamentoPix)
         {
-            await _repostorio.Atualizar(id, pagamentoPix);
+            if (id == 0 || id != pagamentoPix.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _pagamentosPixService.Atualizar(pagamentoPix);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("pagamentoPix/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _pagamentosPixService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

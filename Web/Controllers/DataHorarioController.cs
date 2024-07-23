@@ -1,5 +1,7 @@
 using Dominio.Interfaces;
+using Dominio.Service;
 using Microsoft.AspNetCore.Mvc;
+using Modelos.Cliente;
 using Modelos.DataHorario;
 
 namespace Web.Controllers
@@ -8,44 +10,88 @@ namespace Web.Controllers
     [ApiController]
     public class DataHorarioController : ControllerBase
     {
-        private readonly IRepository<DataHorario> _repostorio;
-        public DataHorarioController(IRepository<DataHorario> repostorio)
+        private readonly IDataHorariosService _dataHorariosService;
+
+        public DataHorarioController(IDataHorariosService dataHorariosService)
         {
-            _repostorio = repostorio;
+            _dataHorariosService = dataHorariosService;
         }
 
         [HttpGet("dataHorarios")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var dataHorarios = await _repostorio.ObterTodos();
-            return Ok(dataHorarios);
+            return Ok(await _dataHorariosService.ObterTodos());
         }
 
         [HttpGet("dataHorarios/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var dataHorario = await _repostorio.ObterPorId(id);
-            return Ok(dataHorario);
+            try
+            {
+                return Ok(await _dataHorariosService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("dataHorario")]
-        public async Task<CreatedResult> Adicionar([FromBody] DataHorario dataHorario)
+        public async Task<ActionResult> Adicionar([FromBody] DataHorario dataHorario)
         {
-            await _repostorio.Adicionar(dataHorario);
-            return Created();
+            try
+            {
+                return Ok(await _dataHorariosService.Adicionar(dataHorario));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("pagamento/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] DataHorario dataHorario)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] DataHorario dataHorario)
         {
-            await _repostorio.Atualizar(id, dataHorario);
+            if (id == 0 || id != dataHorario.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _dataHorariosService.Atualizar(dataHorario);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("dataHorario/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _dataHorariosService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

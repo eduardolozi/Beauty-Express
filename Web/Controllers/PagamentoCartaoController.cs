@@ -1,7 +1,7 @@
 using Dominio.Interfaces;
-using Dominio.Modelos;
-using Microsoft.AspNetCore.Http;
+using Dominio.Service;
 using Microsoft.AspNetCore.Mvc;
+using Modelos.Cliente;
 using Modelos.PagamentoCartao;
 
 namespace Web.Controllers
@@ -10,44 +10,88 @@ namespace Web.Controllers
     [ApiController]
     public class PagamentoCartaoController : ControllerBase
     {
-        private readonly IRepository<PagamentoCartao> _repostorio;
-        public PagamentoCartaoController(IRepository<PagamentoCartao> repostorio)
+        private IPagamentoCartaoService _pagamentoCartaoService;
+
+        public PagamentoCartaoController(IPagamentoCartaoService pagamentoCartaoService)
         {
-            _repostorio = repostorio;
+            _pagamentoCartaoService = pagamentoCartaoService;
         }
 
         [HttpGet("pagamentosCartao")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var pagamentosCartao = await _repostorio.ObterTodos();
-            return Ok(pagamentosCartao);
+            return Ok(await _pagamentoCartaoService.ObterTodos());
         }
 
         [HttpGet("pagamentoCartao/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var pagamentoCartao = await _repostorio.ObterPorId(id);
-            return Ok(pagamentoCartao);
+            try
+            {
+                return Ok(await _pagamentoCartaoService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("pagamentoCartao")]
-        public async Task<CreatedResult> Adicionar([FromBody] PagamentoCartao pagamentoCartao)
+        public async Task<ActionResult> Adicionar([FromBody] PagamentoCartao pagamentoCartao)
         {
-            await _repostorio.Adicionar(pagamentoCartao);
-            return Created();
+            try
+            {
+                return Ok(await _pagamentoCartaoService.Adicionar(pagamentoCartao));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("pagamentoCartao/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] PagamentoCartao pagamentoCartao)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] PagamentoCartao pagamentoCartao)
         {
-            await _repostorio.Atualizar(id, pagamentoCartao);
+            if (id == 0 || id != pagamentoCartao.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _pagamentoCartaoService.Atualizar(pagamentoCartao);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("pagamentoCartao/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _pagamentoCartaoService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

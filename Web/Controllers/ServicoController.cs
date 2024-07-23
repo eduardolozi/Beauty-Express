@@ -1,6 +1,5 @@
 using Dominio.Interfaces;
 using Dominio.Modelos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -9,44 +8,88 @@ namespace Web.Controllers
     [ApiController]
     public class ServicoController : ControllerBase
     {
-        private readonly IRepository<Servico> _repostorio;
-        public ServicoController(IRepository<Servico> repostorio)
+        private IServicosService _servicosService;
+
+        public ServicoController(IServicosService servicosService)
         {
-            _repostorio = repostorio;
+            _servicosService = servicosService;
         }
 
         [HttpGet("servicos")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var servicos = await _repostorio.ObterTodos();
-            return Ok(servicos);
+            return Ok(await _servicosService.ObterTodos());
         }
 
         [HttpGet("servico/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var servico = await _repostorio.ObterPorId(id);
-            return Ok(servico);
+            try
+            {
+                return Ok(await _servicosService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("servico")]
-        public async Task<CreatedResult> Adicionar([FromBody] Servico servico)
+        public async Task<ActionResult> Adicionar([FromBody] Servico servico)
         {
-            await _repostorio.Adicionar(servico);
-            return Created();
+            try
+            {
+                return Ok(await _servicosService.Adicionar(servico));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("servico/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] Servico servico)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Servico servico)
         {
-            await _repostorio.Atualizar(id, servico);
+            if (id == 0 || id != servico.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _servicosService.Atualizar(servico);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("servico/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _servicosService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

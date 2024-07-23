@@ -1,7 +1,9 @@
 ﻿using Dominio.Interfaces;
 using Dominio.Modelos;
+using Dominio.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Modelos.Cliente;
 
 namespace Web.Controllers
 {
@@ -9,44 +11,88 @@ namespace Web.Controllers
     [ApiController]
     public class AgendamentoController : ControllerBase
     {
-        private readonly IRepository<Agendamento> _repostorio;
-        public AgendamentoController(IRepository<Agendamento> repostorio)
+        private readonly IAgendamentosService _agendamentosService;
+
+        public AgendamentoController(IAgendamentosService agendamentosService)
         {
-            _repostorio = repostorio;
+            _agendamentosService = agendamentosService;
         }
 
         [HttpGet("agendamentos")]
         public async Task<OkObjectResult> ObterTodos()
         {
-            var agendamentos = await _repostorio.ObterTodos();
-            return Ok(agendamentos);
+            return Ok(await _agendamentosService.ObterTodos());
         }
 
         [HttpGet("agendamento/{id}")]
-        public async Task<OkObjectResult> ObterPorId([FromRoute] int id)
+        public async Task<ActionResult> ObterPorId([FromRoute] int id)
         {
-            var agendamento = await _repostorio.ObterPorId(id);
-            return Ok(agendamento);
+            try
+            {
+                return Ok(await _agendamentosService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPost("agendamento")]
-        public async Task<CreatedResult> Adicionar([FromBody] Agendamento agendamento)
+        public async Task<ActionResult> Adicionar([FromBody] Agendamento agendamento)
         {
-            await _repostorio.Adicionar(agendamento);
-            return Created();
+            try
+            {
+                return Ok(await _agendamentosService.Adicionar(agendamento));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
         }
 
         [HttpPatch("agendamento/{id}")]
-        public async Task<NoContentResult> Atualizar([FromRoute] int id, [FromBody] Agendamento agendamento)
+        public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Agendamento agendamento)
         {
-            await _repostorio.Atualizar(id, agendamento);
+            if (id == 0 || id != agendamento.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _agendamentosService.Atualizar(agendamento);
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
+
             return NoContent();
         }
 
         [HttpDelete("agendamento/{id}")]
-        public async Task<NoContentResult> Remover([FromRoute] int id)
+        public async Task<IActionResult> Remover([FromRoute] int id)
         {
-            await _repostorio.Remover(id);
+            try
+            {
+                Ok(await _agendamentosService.Remover(id));
+            }
+            catch (Exception ex)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = ex.Message
+                });
+            }
             return NoContent();
         }
     }

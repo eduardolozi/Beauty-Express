@@ -3,7 +3,7 @@ using Modelos.DataHorario;
 
 namespace Dominio.Modelos
 {
-    public class Agendamento
+    public class Agendamento : EntitiesAbstract
     {
         public int Id { get; set; }
         public int EstabelecimentoId { get; set; }
