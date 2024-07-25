@@ -120,6 +120,7 @@ a {
 
 .button:hover {
     background: hsl(240, 80%, 89%);
+    cursor: pointer;
 }
 
 .fill-one {

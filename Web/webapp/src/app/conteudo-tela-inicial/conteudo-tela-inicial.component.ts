@@ -9,5 +9,4 @@ import { CardApresentacaoComponent } from '../card-apresentacao/card-apresentaca
   styleUrl: './conteudo-tela-inicial.component.css'
 })
 export class ConteudoTelaInicialComponent {
-
 }
