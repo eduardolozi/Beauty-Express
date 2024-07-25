@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { TelaInicialComponent } from './tela-inicial/tela-inicial.component';
-import { LoginComponent } from './login/login.component';
+import { CadastroComponent } from './cadastro/cadastro.component';
 
 export const routes: Routes = [
-    {path: '', component: TelaInicialComponent},
-    {path: 'login', component: LoginComponent}
+    {path: 'home', title: 'Home', component: TelaInicialComponent},
+    {path: 'cadastro', title: 'Cadastro', component: CadastroComponent},
+    {path: '', redirectTo: 'home', pathMatch: 'full'},
 ];
