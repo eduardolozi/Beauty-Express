@@ -14,7 +14,6 @@ namespace Infra
 
             servicos.AddScoped<IClienteRepository, ClienteRepository>();
             servicos.AddScoped<IClienteService, ClienteService>();
-            servicos.AddScoped<LoginService>();
             servicos.AddScoped<ClienteValidator>();
 
             servicos.AddScoped<IEstabelecimentosRepository, EstabelecimentoRepository>();

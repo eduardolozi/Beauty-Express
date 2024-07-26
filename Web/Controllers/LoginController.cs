@@ -10,16 +10,25 @@ namespace Web.Controllers
     public class LoginController : ControllerBase
     {
         private readonly LoginService _loginService;
-        public LoginController(LoginService loginService)
+        private readonly TokenService _tokenService;
+        public LoginController(LoginService loginService, TokenService tokenService)
         {
             _loginService = loginService;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
-        public OkResult Login([FromBody] ClienteDto clienteDto)
+        public OkObjectResult Login([FromBody] ClienteDto clienteDto)
         {
-            _loginService.Login(clienteDto);
-            return Ok();
+            var token = _loginService.Login(clienteDto);
+            return Ok(token);
+        }
+
+        [HttpGet("validarToken")]
+        public IActionResult VerificaValidadeToken([FromBody] string token)
+        {
+            var tokenEhValido = _tokenService.TokenEhValido(token);
+            return tokenEhValido?  Ok() : Unauthorized();
         }
     }
 }

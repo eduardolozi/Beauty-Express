@@ -11,7 +11,7 @@ namespace Infra
 {
     public class BeautyContext : DbContext
     {
-        private readonly string ConexaoBanco = "Server=DESKTOP-NQ31Q0H\\SQLEXPRESS;Database=BeautyExpress;Integrated Security = SSPI; TrustServerCertificate=True";
+        private readonly string ConexaoBanco = "Server=DESKTOP-HEUDNMR\\B1;Database=BeautyExpress;User ID=sa;Password=sap@123;TrustServerCertificate=True;encrypt=false";
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.UseSqlServer(ConexaoBanco);

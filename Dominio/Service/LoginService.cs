@@ -8,20 +8,25 @@ namespace Dominio.Service
     public class LoginService
     {
         private readonly IClienteRepository _clienteRepository;
-        public LoginService(IClienteRepository clienteRepository) 
+        private readonly TokenService _tokenService;
+        public LoginService(IClienteRepository clienteRepository, TokenService tokenService) 
         {
             _clienteRepository = clienteRepository;
+            _tokenService = tokenService;
         }
 
-        public Cliente Login(ClienteDto clienteDto)
+        public string Login(ClienteDto clienteDto)
         {
             if (string.IsNullOrEmpty(clienteDto.Email) && string.IsNullOrEmpty(clienteDto.Username))
                 throw new Exception("Login deve ter username ou email.");
             if (string.IsNullOrEmpty(clienteDto.Senha))
                 throw new Exception("Por favor digite a senha.");
 
-            return _clienteRepository.VerificarLoginNoBanco(clienteDto)
+            var usuario = _clienteRepository.VerificarLoginNoBanco(clienteDto)
                             ?? throw new Exception("Credenciais inválidas");
+
+            var token = _tokenService.GerarToken(usuario);
+            return token;
         }
     }
 }
