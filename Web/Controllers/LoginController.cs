@@ -18,14 +18,14 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public OkObjectResult Login([FromBody] ClienteDto clienteDto)
+        public OkObjectResult Login([FromQuery] ClienteDto clienteDto)
         {
             var token = _loginService.Login(clienteDto);
             return Ok(token);
         }
 
         [HttpGet("validarToken")]
-        public IActionResult VerificaValidadeToken([FromBody] string token)
+        public IActionResult VerificaValidadeToken([FromQuery] string token)
         {
             var tokenEhValido = _tokenService.TokenEhValido(token);
             return tokenEhValido?  Ok() : Unauthorized();

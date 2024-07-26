@@ -15,6 +15,6 @@ public class ClienteRepository : BaseRepository<Cliente>, IClienteRepository
     {
         return Contexto
             .Clientes
-            .FirstOrDefault(c => (c.Nome == clienteDto.Username || c.Email == clienteDto.Email) && c.Senha == clienteDto.Senha);
+            .FirstOrDefault(c => (c.Nome == clienteDto.NomeOuEmail || c.Email == clienteDto.NomeOuEmail) && c.Senha == clienteDto.Senha);
     }
 }

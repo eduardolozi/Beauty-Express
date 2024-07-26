@@ -17,7 +17,7 @@ namespace Dominio.Service
 
         public string Login(ClienteDto clienteDto)
         {
-            if (string.IsNullOrEmpty(clienteDto.Email) && string.IsNullOrEmpty(clienteDto.Username))
+            if (string.IsNullOrEmpty(clienteDto.NomeOuEmail))
                 throw new Exception("Login deve ter username ou email.");
             if (string.IsNullOrEmpty(clienteDto.Senha))
                 throw new Exception("Por favor digite a senha.");
