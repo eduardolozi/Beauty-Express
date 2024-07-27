@@ -1,27 +1,27 @@
-import { Injectable } from '@angular/core';
-import {CanActivateFn ,ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { LoginService } from './login/login.service'; 
-import { map, catchError, of, Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { LoginService } from "./login/login.service";
+import { inject, Injectable } from "@angular/core";
+import { map, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthGuard {
-  constructor(private loginService: LoginService, private router: Router) {}
-    podeNavegar(): Observable<boolean> {
-        return this.loginService.tokenValido().pipe(
-          map(codigo => {
-            if (codigo === 200) {
-              return true;
-            } else {
-              this.router.navigate(['/home']);
-              return false;
-            }
-          }),
-          catchError((error) => {
-            this.router.navigate(['/home']);
-            return of(false);
-          })
-        );
-    }
+
+  constructor(private router: Router, private loginService: LoginService)   
+ {}
+
+  canActivate: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) :
+  Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree => {
+    return this.loginService.tokenValido().pipe(
+      map(valido => {
+        if (valido) {
+          return true;
+        } else {
+          this.router.navigate(['/home']);
+          return false;
+        }
+      })
+    );
+  }
 }

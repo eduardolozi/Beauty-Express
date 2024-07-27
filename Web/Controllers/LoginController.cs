@@ -24,11 +24,11 @@ namespace Web.Controllers
             return Ok(token);
         }
 
-        [HttpGet("validarToken")]
+        [HttpGet("tokenValido")]
         public IActionResult VerificaValidadeToken([FromQuery] string token)
         {
             var tokenEhValido = _tokenService.TokenEhValido(token);
-            return tokenEhValido?  Ok() : Unauthorized();
+            return tokenEhValido ?  Ok() : Unauthorized();
         }
     }
 }

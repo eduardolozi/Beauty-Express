@@ -1,6 +1,5 @@
 import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import { ToolbarTelaInicialComponent } from '../toolbar-tela-inicial/toolbar-tela-inicial.component';
-import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'app-menu',
@@ -11,9 +10,8 @@ import { AuthGuard } from '../auth.guard';
 })
 export class MenuComponent implements OnInit {
 
-  constructor(private authGuard: AuthGuard) { }
+  constructor() { }
   ngOnInit(): void {
-    this.authGuard.podeNavegar();
   } 
   
 }
