@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink} from '@angular/router';
-import { Login, LoginService } from './login.service';
+import { Login, LoginService } from '../servicos/login.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

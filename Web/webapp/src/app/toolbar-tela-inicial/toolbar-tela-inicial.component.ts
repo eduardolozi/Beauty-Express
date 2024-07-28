@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { LoginService } from '../servicos/login.service';
 
 @Component({
   selector: 'app-toolbar-tela-inicial',
@@ -8,6 +9,11 @@ import { RouterLink } from '@angular/router';
   templateUrl: './toolbar-tela-inicial.component.html',
   styleUrl: './toolbar-tela-inicial.component.css'
 })
-export class ToolbarTelaInicialComponent {
-
+export class ToolbarTelaInicialComponent implements OnInit {
+  rotaHome: boolean = true;
+  iniciaisNome: string = "";
+  constructor(private route: Router) {}
+  ngOnInit(): void {
+      this.rotaHome = this.route.url.includes("/home");
+  }
 }

@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { LoginService } from "./login/login.service";
+import { LoginService } from "./servicos/login.service";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 
