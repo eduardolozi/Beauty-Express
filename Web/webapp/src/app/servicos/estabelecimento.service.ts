@@ -21,4 +21,9 @@ export class EstabelecimentoService {
         var url = this.urlApi + this.sufixoEstabelecimentos;
         return this.http.get<Estabelecimento[]>(url);
     }
+
+    obterPorId(id: number): Observable<Estabelecimento> {
+        var url = this.urlApi + this.sufixoEstabelecimento + "/" + id;
+        return this.http.get<Estabelecimento>(url);
+    }
 }
